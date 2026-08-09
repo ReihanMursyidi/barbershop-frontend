@@ -320,7 +320,7 @@ const BookingSection = forwardRef((props, ref) => {
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Layanan:</span><span className="text-offwhite font-bold">{selectedService?.name}</span></div>
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Barber:</span><span className="text-offwhite font-bold">{bookingData.barberId === 'any' ? 'Siapa Saja' : selectedBarber?.name}</span></div>
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Jadwal:</span><span className="text-gold font-bold">{formatDateIndo(bookingData.date)} ({bookingData.time})</span></div>
-                      <div className="flex justify-between text-base border-t border-gray-800 pt-3"><span className="text-offwhite font-bold">Total Est:</span><span className="text-gold font-black text-xl">{selectedService?.price}</span></div>
+                      <div className="flex justify-between text-base border-t border-gray-800 pt-3"><span className="text-offwhite font-bold">Total Est:</span><span className="text-gold font-black text-xl">Rp {selectedService?.price}</span></div>
                     </div>
                   </div>
 
