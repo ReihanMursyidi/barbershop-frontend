@@ -32,6 +32,8 @@ const BookingSection = forwardRef((props, ref) => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [assignedBarber, setAssignedBarber] = useState(null)
 
+  const [bookedSlots, setBookedSlots] = useState([])
+  
   useEffect(() => {
     // Ambil data layanan dan barber langsung dari backend Vercel
     Promise.all([
@@ -78,10 +80,6 @@ const BookingSection = forwardRef((props, ref) => {
     return slots
   }
   const allTimeSlots = generateTimeSlots() // Berisi 22 slot (10:00 sampai 20:30)
-
-  const [bookedSlots, setBookedSlots] = useState([])
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault()
