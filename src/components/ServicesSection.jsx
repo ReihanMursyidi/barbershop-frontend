@@ -23,7 +23,7 @@ const ServicesSection = forwardRef(({ onSelectService }, ref) => {
         setIsLoading(false)
       })
   }, [])
-  
+
   if (isLoading) {
     return <div className="text-center py-20 text-gold">Memuat layanan...</div>
   }

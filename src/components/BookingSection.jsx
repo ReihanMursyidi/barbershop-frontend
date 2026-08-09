@@ -54,6 +54,26 @@ const BookingSection = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     scrollIntoView: (options) => {
       sectionRef.current?.scrollIntoView(options)
+    },
+    selectServiceAndGoToBarber: (serviceId) => {
+      setBookingData((prev) => ({ 
+        ...prev, 
+        serviceId: serviceId // Simpan ID layanan
+      }))
+      setStep(2) // Pindah ke Step 2 (Pilih Barber)
+      setIsSubmitted(false) // Reset form jika sebelumnya sudah disubmit
+    },
+    startGeneralBooking: () => {
+      setStep(1);
+      setIsSubmitted(false);
+      setBookingData({
+        serviceId: null,
+        barberId: null,
+        date: '',
+        time: '',
+        name: '',
+        phone: ''
+      });
     }
   }))
   
@@ -158,8 +178,13 @@ const BookingSection = forwardRef((props, ref) => {
                     {servicesData.map((srv) => (
                       <div 
                         key={srv.id}
-                        onClick={() => { setBookingData({ ...bookingData, serviceId: srv.id }); nextStep(); }}
-                        className={`p-5 rounded-xl border cursor-pointer transition-all duration-300 flex flex-col justify-between ${bookingData.serviceId === srv.id ? 'border-gold bg-gold/10 shadow-[0_0_15px_rgba(212,175,55,0.2)]' : 'border-gray-800 bg-black/20 hover:border-gold/50'}`}
+                        onClick={() => { 
+                          setBookingData({ ...bookingData, serviceId: srv.id }); 
+                          nextStep(); 
+                        }}
+                        className={`p-5 rounded-xl border cursor-pointer transition-all duration-300 flex flex-col justify-between ${
+                          String(bookingData.serviceId) === String(srv.id) ? 'border-gold bg-gold/10 shadow-[0_0_15px_rgba(212,175,55,0.2)]' : 'border-gray-800 bg-black/20 hover:border-gold/50'
+                        }`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <h6 className="font-bold text-offwhite text-lg">{srv.name}</h6>
