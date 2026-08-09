@@ -35,6 +35,10 @@ const Home = () => {
     bookingRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const scrollToBooking = () => {
+    bookingRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <main className="min-h-screen bg-charcoal text-offwhite font-sans selection:bg-gold selection:text-charcoal">
       
@@ -42,7 +46,8 @@ const Home = () => {
       <Navbar 
         scrollToServices={scrollToServices} 
         scrollToBarbers={scrollToBarbers} 
-        scrollToGallery={scrollToGallery} 
+        scrollToGallery={scrollToGallery}
+        scrollToBooking={scrollToBooking}
       />
 
       {/* Hero Section */}
