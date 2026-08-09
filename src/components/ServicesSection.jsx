@@ -13,14 +13,20 @@ const ServicesSection = forwardRef(({ onSelectService }, ref) => {
       .then((res) => res.json())
       .then((data) => {
         setServicesData(data)
-        setIsLoading(false)
+        if (data.length > 0) {
+          setActiveService(data[0]) // Set default ke layanan pertama
+        }
+        setLoading(false)
       })
       .catch((err) => {
         console.error("Gagal memuat data layanan:", err)
         setIsLoading(false)
       })
   }, [])
-
+  
+  if (loading) {
+    return <div className="text-center py-20 text-gold">Memuat layanan...</div>
+  }
   return (
     
     <section ref={ref} className="pt-24 pb-56 px-6 lg:px-16 relative z-0">
