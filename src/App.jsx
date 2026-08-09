@@ -29,13 +29,12 @@ const Home = () => {
     galleryRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // Klik "Pilih Layanan Ini" di ServicesSection -> Set Service & Langsung ke Step 2 (Barber)
-  const handleSelectServiceFromMenu = (serviceId) => {
-    bookingRef.current?.selectServiceAndGoToBarber(serviceId)
+  const scrollToBooking = () => {
     bookingRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const scrollToBooking = () => {
+  const handleSelectServiceFromMenu = (serviceId) => {
+    bookingRef.current?.selectServiceAndGoToBarber(serviceId)
     bookingRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
