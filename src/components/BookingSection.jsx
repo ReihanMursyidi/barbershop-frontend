@@ -163,7 +163,7 @@ const BookingSection = forwardRef((props, ref) => {
                       >
                         <div className="flex justify-between items-start mb-2">
                           <h6 className="font-bold text-offwhite text-lg">{srv.name}</h6>
-                          <span className="text-gold font-extrabold">{srv.price}</span>
+                          <span className="text-gold font-extrabold">Rp {srv.price}</span>
                         </div>
                         <div className="flex justify-between items-center mt-2">
                           <span className="text-xs text-gray-400">⏱️ {srv.duration}</span>
