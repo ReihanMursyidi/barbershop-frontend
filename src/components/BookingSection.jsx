@@ -33,7 +33,7 @@ const BookingSection = forwardRef((props, ref) => {
   const [assignedBarber, setAssignedBarber] = useState(null)
 
   const [bookedSlots, setBookedSlots] = useState([])
-  
+
   useEffect(() => {
     // Ambil data layanan dan barber langsung dari backend Vercel
     Promise.all([
@@ -186,7 +186,7 @@ const BookingSection = forwardRef((props, ref) => {
                     </div>
                     {barbersData.map((barber) => (
                       <div key={barber.id} onClick={() => { setBookingData({ ...bookingData, barberId: barber.id }); nextStep(); }} className={`p-5 rounded-xl border cursor-pointer text-center transition-all duration-300 ${bookingData.barberId === barber.id ? 'border-gold bg-gold/10' : 'border-gray-800 bg-black/20 hover:border-gold/50'}`}>
-                        <img src={barber.photoUrl} alt={barber.name} className="w-16 h-16 mx-auto rounded-full object-cover mb-3 grayscale border border-gray-700" />
+                        <img src={barber.photo_url} alt={barber.name} className="w-16 h-16 mx-auto rounded-full object-cover mb-3 grayscale border border-gray-700" />
                         <span className="font-bold text-offwhite block">{barber.name}</span>
                       </div>
                     ))}
