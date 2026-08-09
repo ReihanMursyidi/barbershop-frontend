@@ -25,9 +25,11 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('jadwal')
     const [isShopOpen, setIsShopOpen] = useState(false)
 
+    const URL = 'https://barbershop-backend-delta.vercel.app';
+
     const fetchBarbers = async () => {
         try {
-            const response = await fetch('http://localhost:8000/admin/barbers')
+            const response = await fetch(`${URL}/admin/barbers`)
             if (response.ok) {
                 const data = await response.json()
                 setBarbersList(data.map(b => b.name))
@@ -67,7 +69,7 @@ const AdminDashboard = () => {
         setIsLoading(true)
         try {
             // Dummy data sementara sebelum API Backend dibuat
-            const response = await fetch(`http://localhost:8000/admin/bookings?date=${selectedDate}`)
+            const response = await fetch(`${URL}/admin/bookings?date=${selectedDate}`)
             if (response.ok) {
             const data = await response.json()
             setBookings(data)

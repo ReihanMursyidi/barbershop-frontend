@@ -12,10 +12,12 @@ const ServicesTab = () => {
   const [isEditingService, setIsEditingService] = useState(false)
   const [editServiceId, setEditServiceId] = useState(null)
 
+  const URL = 'https://barbershop-backend-delta.vercel.app';
+
   // 2. FETCH DATA (GET)
   const fetchServices = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/services')
+      const response = await fetch(`${URL}/admin/services`)
       if (response.ok) {
         const data = await response.json()
         setServicesList(data)
@@ -35,7 +37,7 @@ const ServicesTab = () => {
     if (!newService.name || !newService.price) return alert("Nama dan Harga Layanan wajib diisi!")
 
     try {
-      const response = await fetch('http://localhost:8000/admin/services', {
+      const response = await fetch(`${URL}/admin/services`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -59,7 +61,7 @@ const ServicesTab = () => {
     if (!confirmDelete) return
 
     try {
-      const response = await fetch(`http://localhost:8000/admin/services/${id}`, { method: 'DELETE' })
+      const response = await fetch(`${URL}/admin/services/${id}`, { method: 'DELETE' })
       if (response.ok) fetchServices()
     } catch (error) { console.log('Error:', error) }
   }
@@ -90,7 +92,7 @@ const ServicesTab = () => {
     if (!newService.name || !newService.price) return alert("Nama dan Harga Layanan wajib diisi!")
 
     try {
-      const response = await fetch(`http://localhost:8000/admin/services/${editServiceId}`, {
+      const response = await fetch(`${URL}/admin/services/${editServiceId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
