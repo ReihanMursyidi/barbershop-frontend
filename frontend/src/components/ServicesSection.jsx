@@ -7,27 +7,18 @@ const ServicesSection = forwardRef(({ onSelectService }, ref) => {
   const [activeService, setActiveService] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const URL = 'https://barbershop-backend-delta.vercel.app';
-
   useEffect(() => {
-    const fetchPublicServices = async () => {
-      try {
-        const response = await fetch(`${URL}/services`)
-        if (response.ok) {
-          const data = await response.json()
-          setServicesData(data)
-
-          if (data.length > 0) {
-            setActiveService(data[0])
-          }
-        }
-      } catch (error) {
-        console.error("Gagal menarik layanan publik:", error)
-      } finally {
+    // Gunakan URL Backend Vercel Anda yang aktif
+    fetch("https://barbershop-backend-delta.vercel.app/services") // Sesuaikan endpoint di backend Anda (misal: /services atau /api/services)
+      .then((res) => res.json())
+      .then((data) => {
+        setServicesData(data)
         setIsLoading(false)
-      }
-    }
-    fetchPublicServices()
+      })
+      .catch((err) => {
+        console.error("Gagal memuat data layanan:", err)
+        setIsLoading(false)
+      })
   }, [])
 
   return (

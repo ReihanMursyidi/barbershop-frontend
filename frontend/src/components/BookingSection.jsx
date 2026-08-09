@@ -68,6 +68,8 @@ const BookingSection = forwardRef((props, ref) => {
 
   const [bookedSlots, setBookedSlots] = useState([])
 
+  const URL = 'https://barbershop-backend-delta.vercel.app';
+
   useEffect(() => {
     const fetchBookedSlots = async () => {
       if (!bookingData.date) return;
@@ -75,7 +77,7 @@ const BookingSection = forwardRef((props, ref) => {
       try {
         const bId = bookingData.barberId === 'any' ? 0 : bookingData.barberId;
 
-        const response = await fetch(`http://localhost:8000/bookings/booked-slots?barber_id=${bId}&date_str=${bookingData.date}`);
+        const response = await fetch(`${URL}/bookings/booked-slots?barber_id=${bId}&date_str=${bookingData.date}`);
 
         const data = await response.json();
 
@@ -103,7 +105,7 @@ const BookingSection = forwardRef((props, ref) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/bookings', {
+      const response = await fetch(`${URL}/bookings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
