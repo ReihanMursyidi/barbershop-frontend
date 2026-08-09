@@ -166,8 +166,8 @@ const BookingSection = forwardRef((props, ref) => {
                           <span className="text-gold font-extrabold">Rp {srv.price}</span>
                         </div>
                         <div className="flex justify-between items-center mt-2">
-                          <span className="text-xs text-gray-400">⏱️ {srv.duration}</span>
-                          <span className="text-[10px] bg-gray-800 text-gray-300 px-2 py-1 rounded">Membutuhkan {srv.time_blocks} Blok</span>
+                          <span className="text-xs text-gray-400">⏱️ {srv.duration_blocks * 30} Menit</span>
+                          <span className="text-[10px] bg-gray-800 text-gray-300 px-2 py-1 rounded">Membutuhkan {srv.duration_blocks} Blok</span>
                         </div>
                       </div>
                     ))}
@@ -199,7 +199,7 @@ const BookingSection = forwardRef((props, ref) => {
                 <div className="animate-fade-in-up">
                   <h5 className="text-2xl font-bold text-offwhite mb-2">3. Pilih Tanggal & Jam</h5>
                   <p className="text-gray-400 text-sm mb-6">
-                    Layanan <span className="text-gold font-bold">{selectedService?.name}</span> membutuhkan waktu <span className="text-gold font-bold">{selectedService?.duration} ({selectedService?.time_blocks} Blok)</span>.
+                    Layanan <span className="text-gold font-bold">{selectedService?.name}</span> membutuhkan waktu <span className="text-gold font-bold">{selectedService?.duration_blocks * 30} Menit ({selectedService?.duration_blocks} Blok)</span>.
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -225,7 +225,7 @@ const BookingSection = forwardRef((props, ref) => {
                         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
                           {allTimeSlots.map((timeSlot, index) => {
                             // 1. Cek apakah ada cukup blok waktu sampai toko tutup?
-                            const requiredBlocks = selectedService ? selectedService.time_blocks : 1
+                            const requiredBlocks = selectedService ? selectedService.duration_blocks : 1
                             const isExceedingClosingTime = index + requiredBlocks > allTimeSlots.length
                             
                             let hasConflict = false;
