@@ -3,7 +3,6 @@ import React, { forwardRef } from 'react'
 const HeroSection = forwardRef(({ bookingRef, servicesRef }, ref) => {
   
   const handleStartGeneralBooking = () => {
-    bookingRef?.current?.startGeneralBooking();
     bookingRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
