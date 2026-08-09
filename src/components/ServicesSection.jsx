@@ -16,7 +16,7 @@ const ServicesSection = forwardRef(({ onSelectService }, ref) => {
         if (data.length > 0) {
           setActiveService(data[0]) // Set default ke layanan pertama
         }
-        setLoading(false)
+        setIsLoading(false)
       })
       .catch((err) => {
         console.error("Gagal memuat data layanan:", err)
