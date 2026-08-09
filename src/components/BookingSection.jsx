@@ -1,7 +1,5 @@
 // file: src/components/BookingSection.jsx
 import React, { forwardRef, useState, useImperativeHandle, useRef, useEffect } from 'react'
-import { servicesData } from '../data/servicesData'
-import { barbersData } from '../data/barbersData'
 
 // Format Tanggal bahasa Indonesia
 const formatDateIndo = (dateStr) => {
@@ -18,6 +16,10 @@ const BookingSection = forwardRef((props, ref) => {
   const sectionRef = useRef(null)
   
   const [step, setStep] = useState(1)
+  const [servicesData, setServicesData] = useState([]) // State dinamis untuk layanan
+  const [barbersData, setBarbersData] = useState([])   // State dinamis untuk barber
+  const [isLoading, setIsLoading] = useState(true)
+  
   const [bookingData, setBookingData] = useState({
     serviceId: null,
     barberId: null,
@@ -30,21 +32,32 @@ const BookingSection = forwardRef((props, ref) => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [assignedBarber, setAssignedBarber] = useState(null)
 
+  useEffect(() => {
+    // Ambil data layanan dan barber langsung dari backend Vercel
+    Promise.all([
+      fetch("https://barbershop-backend-delta.vercel.app/services").then(res => res.json()),
+      fetch("https://barbershop-backend-delta.vercel.app/barbers").then(res => res.json())
+    ])
+    .then(([services, barbers]) => {
+      setServicesData(services)
+      setBarbersData(barbers)
+      setIsLoading(false)
+    })
+    .catch(err => {
+      console.error("Gagal memuat data untuk booking:", err)
+      setIsLoading(false)
+    })
+  }, [])
+
   useImperativeHandle(ref, () => ({
     scrollIntoView: (options) => {
       sectionRef.current?.scrollIntoView(options)
-    },
-    startGeneralBooking: () => {
-      setIsSubmitted(false)
-      setBookingData({ serviceId: null, barberId: null, date: '', time: '', name: '', phone: '' })
-      setStep(1)
-    },
-    selectServiceAndGoToBarber: (serviceId) => {
-      setIsSubmitted(false)
-      setBookingData((prev) => ({ ...prev, serviceId: serviceId, barberId: null, date: '', time: '' }))
-      setStep(2)
     }
   }))
+  
+  if (isLoading) {
+    return <div ref={sectionRef} className="py-20 text-center text-gold">Memuat sistem booking...</div>
+  }
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 4))
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1))
@@ -68,29 +81,7 @@ const BookingSection = forwardRef((props, ref) => {
 
   const [bookedSlots, setBookedSlots] = useState([])
 
-  const URL = 'https://barbershop-backend-delta.vercel.app';
 
-  useEffect(() => {
-    const fetchBookedSlots = async () => {
-      if (!bookingData.date) return;
-
-      try {
-        const bId = bookingData.barberId === 'any' ? 0 : bookingData.barberId;
-
-        const response = await fetch(`${URL}/bookings/booked-slots?barber_id=${bId}&date_str=${bookingData.date}`);
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setBookedSlots(data);
-        }
-      } catch (error) {
-        console.error("Gagal mengecek jadwal bentrok:", error);
-      }
-    };
-
-    fetchBookedSlots();
-  }, [bookingData.date, bookingData.barberId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -105,7 +96,8 @@ const BookingSection = forwardRef((props, ref) => {
     }
 
     try {
-      const response = await fetch(`${URL}/bookings`, {
+      // PERBAIKAN DI SINI: Gunakan URL Vercel Backend Anda secara langsung
+      const response = await fetch("https://barbershop-backend-delta.vercel.app/bookings", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -119,13 +111,13 @@ const BookingSection = forwardRef((props, ref) => {
         const finalBarber = barbersData.find(b => b.id === data.barber_id)
         setAssignedBarber(finalBarber)
         setIsSubmitted(true)
-      } else{
+      } else {
         console.log("🚨 DETIL ERROR DARI BACKEND:", data)
         alert(`⚠️ Gagal Booking: ${data.detail}`)
       }
     } catch (error) {
       console.error('Error saat mengirim booking:', error)
-      alert('❌ Gagal terhubung ke server Backend. Pastikan FastAPI Uvicorn sedang berjalan di port 8000.')
+      alert('❌ Gagal terhubung ke server Backend Vercel.')
     }
   }
 

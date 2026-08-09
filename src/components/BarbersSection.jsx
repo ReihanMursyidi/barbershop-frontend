@@ -6,20 +6,23 @@ const BarbersSection = forwardRef((props, ref) => {
   const [barbersList, setBarbersList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-
   useEffect(() => {
     // Gunakan URL Backend Vercel Anda yang aktif
     fetch("https://barbershop-backend-delta.vercel.app/barbers") // Sesuaikan endpoint di backend Anda (misal: /services atau /api/services)
       .then((res) => res.json())
       .then((data) => {
-        setServicesData(data)
+        setBarbersList(data)
         setIsLoading(false)
       })
       .catch((err) => {
-        console.error("Gagal memuat data layanan:", err)
+        console.error("Gagal memuat data barber:", err)
         setIsLoading(false)
       })
   }, [])
+
+  if (isLoading) {
+    return <div className="text-center py-20 text-gold">Memuat kapster...</div>
+  }
 
   return (
     <section ref={ref} className="pt-24 pb-56 px-6 lg:px-16 bg-charcoal relative">
