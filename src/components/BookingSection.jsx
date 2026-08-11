@@ -71,51 +71,28 @@ const BookingSection = forwardRef((props, ref) => {
       return
     }
 
-    fetch("https://barbershop-backend-delta.vercel.app/bookings/booked_slots")
+    const barberIdParam = bookingData.barberId === 'any' || !bookingData.barberId ? 0 : bookingData.barberId
+    const url = `https://barbershop-backend-delta.vercel.app/bookings/booked-slots?barber_id=${barberIdParam}&date_str=${bookingData.date}`
+
+    fetch(url)
       .then(res => res.json())
       .then(data => {
-        if (!Array.isArray(data)) {
+        if (Array.isArray(data)) {
+          setBookedSlots(data)
+        } else {
           console.error("⚠️ Response backend bukan array:", data)
           setBookedSlots([])
-          return
         }
-        const occupied = []
-
-        data.forEach(booking => {
-          const bookingDateStr = booking.booking_date ? booking.booking_date.split('T')[0] : ''
-          if (bookingDateStr !== bookingData.date) return
-
-          if (bookingData.barberId && bookingData.barberId !== 'any') {
-            if (Number(booking.barber_id) !== Number(bookingData.barberId) && Number(booking.barber_id) !== 0) {
-              return
-            }
-          }
-
-          const timePart = booking.start_time ? booking.start_time.substring(0, 5) : ''
-          const startIndex = allTimeSlots.indexOf(timePart)
-
-          if (startIndex !== -1) {
-            const srv = servicesData.find(s => s.id === booking.service_id)
-            const blocks = srv ? srv.duration_blocks : 1
-
-            for (let i = 0; i < blocks; i++) {
-              if (startIndex + i < allTimeSlots.length) {
-                occupied.push(allTimeSlots[startIndex + i])
-              }
-            }
-          }
-        })
-
-        setBookedSlots(occupied)
       })
       .catch(err => {
         console.error("Gagal mengambil data slot ter-booking:", err)
+        setBookedSlots([])
       })
   }
 
   useEffect(() => {
     fetchBookedSlots()
-  }, [bookingData.date, bookingData.barberId, servicesData])
+  }, [bookingData.date, bookingData.barberId])
   
   useImperativeHandle(ref, () => ({
     scrollIntoView: (options) => {
