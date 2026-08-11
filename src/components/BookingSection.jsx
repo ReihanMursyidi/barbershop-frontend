@@ -71,7 +71,7 @@ const BookingSection = forwardRef((props, ref) => {
       return
     }
 
-    fetch("https://barbershop-backend-delta.vercel.app/bookings")
+    fetch("https://barbershop-backend-delta.vercel.app/bookings/booked_slots")
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) {
@@ -167,7 +167,7 @@ const BookingSection = forwardRef((props, ref) => {
 
     try {
       // PERBAIKAN DI SINI: Gunakan URL Vercel Backend Anda secara langsung
-      const response = await fetch("https://barbershop-backend-delta.vercel.app/bookings/booked_slots", {
+      const response = await fetch("https://barbershop-backend-delta.vercel.app/bookings", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
