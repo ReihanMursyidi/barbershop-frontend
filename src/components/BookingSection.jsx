@@ -64,8 +64,8 @@ const BookingSection = forwardRef((props, ref) => {
     })
   }, [])
 
-  // useEffect untuk mengambil data booking yang sudah ada berdasarkan tanggal & barber
-  useEffect(() => {
+  // Fungsi untuk mengambil data slot ter-booking dari backend
+  const fetchBookedSlots = () => {
     if (!bookingData.date) {
       setBookedSlots([])
       return
@@ -75,29 +75,24 @@ const BookingSection = forwardRef((props, ref) => {
       .then(res => res.json())
       .then(data => {
         const occupied = []
-        
+
         data.forEach(booking => {
-          // Validasi tanggal booking (ambil format YYYY-MM-DD)
           const bookingDateStr = booking.booking_date ? booking.booking_date.split('T')[0] : ''
           if (bookingDateStr !== bookingData.date) return
 
-          // Jika user memilih barber tertentu (bukan 'any'), cek kecocokan barber_id
           if (bookingData.barberId && bookingData.barberId !== 'any') {
             if (Number(booking.barber_id) !== Number(bookingData.barberId) && Number(booking.barber_id) !== 0) {
               return
             }
           }
 
-          // Konversi start_time dari "10:00:00" menjadi "10:00"
           const timePart = booking.start_time ? booking.start_time.substring(0, 5) : ''
           const startIndex = allTimeSlots.indexOf(timePart)
-          
+
           if (startIndex !== -1) {
-            // Hitung jumlah blok waktu berdasarkan layanan yang dipesan sebelumnya
             const srv = servicesData.find(s => s.id === booking.service_id)
             const blocks = srv ? srv.duration_blocks : 1
 
-            // Masukkan semua slot yang terpakai ke dalam array occupied
             for (let i = 0; i < blocks; i++) {
               if (startIndex + i < allTimeSlots.length) {
                 occupied.push(allTimeSlots[startIndex + i])
@@ -111,8 +106,12 @@ const BookingSection = forwardRef((props, ref) => {
       .catch(err => {
         console.error("Gagal mengambil data slot ter-booking:", err)
       })
-  }, [bookingData.date, bookingData.barberId, servicesData])
+  }
 
+  useEffect(() => {
+    fetchBookedSlots()
+  }, [bookingData.date, bookingData.barberId, servicesData])
+  
   useImperativeHandle(ref, () => ({
     scrollIntoView: (options) => {
       sectionRef.current?.scrollIntoView(options)
@@ -177,6 +176,7 @@ const BookingSection = forwardRef((props, ref) => {
         const finalBarber = barbersData.find(b => b.id === data.barber_id)
         setAssignedBarber(finalBarber)
         setIsSubmitted(true)
+        fetchBookedSlots()
       } else {
         console.log("🚨 DETIL ERROR DARI BACKEND:", data)
         alert(`⚠️ Gagal Booking: ${data.detail}`)
@@ -421,7 +421,23 @@ const BookingSection = forwardRef((props, ref) => {
               <p className="text-gray-300 max-w-md mx-auto mb-8 leading-relaxed">
                 Terima kasih, <span className="text-gold font-bold">{bookingData.name}</span>. Jadwal Anda pada <span className="text-gold font-bold">{formatDateIndo(bookingData.date)} pukul {bookingData.time}</span> bersama Barber <span className="text-gold font-bold">{assignedBarber ? assignedBarber.name : 'kami'}</span> telah terdaftar.
               </p>
-              <button onClick={() => { setIsSubmitted(false); setStep(1); }} className="px-8 py-3 border border-gold text-gold hover:bg-gold hover:text-charcoal rounded-lg font-bold transition">Buat Reservasi Baru</button>
+              <button
+                onClick={() => { 
+                  setIsSubmitted(false); 
+                  setStep(1);
+                  setBookingData({
+                    service_id: null,
+                    barberId: null,
+                    date: '',
+                    time: '',
+                    name: '',
+                    phone: ''
+                  });
+                    setBookedSlots([]);
+                }} 
+                className="px-8 py-3 border border-gold text-gold hover:bg-gold hover:text-charcoal rounded-lg font-bold transition">
+                  Buat Reservasi Baru
+              </button>
             </div>
           )}
         </div>
