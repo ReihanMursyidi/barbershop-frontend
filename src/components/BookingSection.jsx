@@ -74,6 +74,11 @@ const BookingSection = forwardRef((props, ref) => {
     fetch("https://barbershop-backend-delta.vercel.app/bookings")
       .then(res => res.json())
       .then(data => {
+        if (!Array.isArray(data)) {
+          console.error("⚠️ Response backend bukan array:", data)
+          setBookedSlots([])
+          return
+        }
         const occupied = []
 
         data.forEach(booking => {
