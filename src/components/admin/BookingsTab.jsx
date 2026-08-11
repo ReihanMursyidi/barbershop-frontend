@@ -5,7 +5,7 @@ const BookingsTab = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [expandedRowId, setExpandedRowId] = useState(null) // State untuk fitur accordion
   
-  const URL = 'https://barbershop-backend-delta.vercel.app';
+  const URL = '/api';
   
   const fetchBookings = async () => {
     try {

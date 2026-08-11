@@ -12,7 +12,7 @@ const ServicesTab = () => {
   const [isEditingService, setIsEditingService] = useState(false)
   const [editServiceId, setEditServiceId] = useState(null)
 
-  const URL = 'https://barbershop-backend-delta.vercel.app';
+  const URL = '/api';
 
   // 2. FETCH DATA (GET)
   const fetchServices = async () => {

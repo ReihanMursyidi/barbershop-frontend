@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://barbershop-backend-delta.vercel.app/:path*"
+        }
+    ]
+}

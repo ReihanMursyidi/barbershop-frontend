@@ -50,8 +50,8 @@ const BookingSection = forwardRef((props, ref) => {
   useEffect(() => {
     // Ambil data layanan dan barber langsung dari backend Vercel
     Promise.all([
-      fetch("https://barbershop-backend-delta.vercel.app/services").then(res => res.json()),
-      fetch("https://barbershop-backend-delta.vercel.app/barbers").then(res => res.json())
+      fetch("/api/services").then(res => res.json()),
+      fetch("/api/barbers").then(res => res.json())
     ])
     .then(([services, barbers]) => {
       setServicesData(services)
@@ -72,7 +72,7 @@ const BookingSection = forwardRef((props, ref) => {
     }
 
     const barberIdParam = bookingData.barberId === 'any' || !bookingData.barberId ? 0 : bookingData.barberId
-    const url = `https://barbershop-backend-delta.vercel.app/bookings/booked-slots?barber_id=${barberIdParam}&date_str=${bookingData.date}`
+    const url = `/api/bookings/booked-slots?barber_id=${barberIdParam}&date_str=${bookingData.date}`
 
     fetch(url)
       .then(res => res.json())
@@ -144,7 +144,7 @@ const BookingSection = forwardRef((props, ref) => {
 
     try {
       // PERBAIKAN DI SINI: Gunakan URL Vercel Backend Anda secara langsung
-      const response = await fetch("https://barbershop-backend-delta.vercel.app/bookings", {
+      const response = await fetch("/api/bookings", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

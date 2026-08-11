@@ -8,7 +8,7 @@ const BarbersSection = forwardRef((props, ref) => {
 
   useEffect(() => {
     // Gunakan URL Backend Vercel Anda yang aktif
-    fetch("https://barbershop-backend-delta.vercel.app/barbers") // Sesuaikan endpoint di backend Anda (misal: /services atau /api/services)
+    fetch("/api/barbers") // Sesuaikan endpoint di backend Anda (misal: /services atau /api/services)
       .then((res) => res.json())
       .then((data) => {
         setBarbersList(data)

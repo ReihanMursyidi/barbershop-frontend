@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('jadwal')
     const [isShopOpen, setIsShopOpen] = useState(false)
 
-    const URL = 'https://barbershop-backend-delta.vercel.app';
+    const URL = '/api';
 
     const fetchBarbers = async () => {
         try {

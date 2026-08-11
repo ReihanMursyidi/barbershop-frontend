@@ -7,7 +7,7 @@ const BarbersTab = () => {
    const [editBarberId, setEditBarberId] = useState(null)
    const [isUploading, setIsUploading] = useState(false)
 
-   const URL = 'https://barbershop-backend-delta.vercel.app';
+   const URL = '/api';
 
    const fetchBarbers = async () => {
       try {
