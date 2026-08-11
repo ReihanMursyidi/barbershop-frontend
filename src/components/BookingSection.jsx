@@ -12,6 +12,20 @@ const formatDateIndo = (dateStr) => {
   return `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]} ${year}`;
 }
 
+// ==========================================
+// LOGIKA TIME-BLOCKING (FRONTEND SIMULATION)
+// ==========================================
+// 1. Generate jam buka toko (10:00 - 21:00) dengan interval 30 menit
+const generateTimeSlots = () => {
+  const slots = []
+  for (let i = 10; i < 21; i++) {
+    slots.push(`${i}:00`)
+    slots.push(`${i}:30`)
+  }
+  return slots
+}
+const allTimeSlots = generateTimeSlots() // Berisi 22 slot (10:00 sampai 20:30)
+
 const BookingSection = forwardRef((props, ref) => {
   const sectionRef = useRef(null)
   
@@ -31,7 +45,6 @@ const BookingSection = forwardRef((props, ref) => {
   
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [assignedBarber, setAssignedBarber] = useState(null)
-
   const [bookedSlots, setBookedSlots] = useState([])
 
   useEffect(() => {
@@ -135,20 +148,6 @@ const BookingSection = forwardRef((props, ref) => {
 
   const selectedService = servicesData.find(s => s.id === bookingData.serviceId)
   const selectedBarber = barbersData.find(b => b.id === bookingData.barberId)
-
-  // ==========================================
-  // LOGIKA TIME-BLOCKING (FRONTEND SIMULATION)
-  // ==========================================
-  // 1. Generate jam buka toko (10:00 - 21:00) dengan interval 30 menit
-  const generateTimeSlots = () => {
-    const slots = []
-    for (let i = 10; i < 21; i++) {
-      slots.push(`${i}:00`)
-      slots.push(`${i}:30`)
-    }
-    return slots
-  }
-  const allTimeSlots = generateTimeSlots() // Berisi 22 slot (10:00 sampai 20:30)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -394,7 +393,12 @@ const BookingSection = forwardRef((props, ref) => {
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Layanan:</span><span className="text-offwhite font-bold">{selectedService?.name}</span></div>
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Barber:</span><span className="text-offwhite font-bold">{bookingData.barberId === 'any' ? 'Siapa Saja' : selectedBarber?.name}</span></div>
                       <div className="flex justify-between text-sm"><span className="text-gray-400">Jadwal:</span><span className="text-gold font-bold">{formatDateIndo(bookingData.date)} ({bookingData.time})</span></div>
-                      <div className="flex justify-between text-base border-t border-gray-800 pt-3"><span className="text-offwhite font-bold">Total Est:</span><span className="text-gold font-black text-xl">Rp {selectedService?.price}</span></div>
+                      <div className="flex justify-between text-base border-t border-gray-800 pt-3">
+                        <span className="text-offwhite font-bold">Total Est:</span>
+                        <span className="text-gold font-black text-xl">
+                          Rp {selectedService?.price ? selectedService.price.toLocaleString('id-ID') : 0}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
